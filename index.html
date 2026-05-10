@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial;
+    }
+
+
+    /* 上面 Outside */
+    #outside {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      font-size: 20px;
+    }
+
+    /* 下面 Inside */
+    #inside {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      font-size: 20px;
+    }
+
+    /* membrane 横线 */
+    #membrane {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background: gray;
+      transform: translateY(-50%);
+    }
+
+    /* 通道和pump的共同样式 */
+    .protein {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 200px;
+      z-index: 3;
+    }
+
+    /* 左中右布局 */
+    #naChannel {
+      left: 100px;
+    }
+
+    #pump {
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #kChannel {
+      right: 100px;
+    }
+
+  </style>
+</head>
+<body>
+
+<h2>Action Potential Model</h2>
+
+<div id="modelArea">
+<div id="cell">
+
+  <div id="outside">Outside (+ + +)</div>
+  <div id="inside">Inside (− − −)</div>
+
+  <div id="membrane"></div>
+
+  <!-- 左：Na channel -->
+  <img src="na_closed.png" id="naChannel" class="protein">
+
+  <!-- 中：Pump -->
+  <img src="pump_inside.png" id="pump" class="protein">
+
+  <!-- 右：K channel -->
+  <img src="k_closed.png" id="kChannel" class="protein">
+
+</div>
+
+<div id="legend">
+  <div><img src="na_ion.png" class="legend-ion" alt=""><span class="legend-ion-label">Na ion</span></div>
+  <div><img src="k_ion.png" class="legend-ion" alt=""><span class="legend-ion-label">K ion</span></div>
+  <div><img src="na_closed.png" alt="">Na channel</div>
+  <div><img src="k_closed.png" alt="">K channel</div>
+  <div><img src="pump_inside.png" alt="">Na/K pump</div>
+</div>
+</div>
+
+<div id="controls">
+  <button onclick="startAnimation()">Pump</button>
+  <button onclick="startDepolarization()">Depolarization</button>
+  <button onclick="startRepolarization()">Repolarization</button>
+  <button onclick="resetModel()">Reset</button>
+  <button onclick="showSynapsePage()">Synapse</button>
+</div>
+
+<div id="graphArea">
+  <div id="voltageReadout">Voltage: -70 mV</div>
+  <div id="graphWrap">
+    <canvas id="graph" width="700" height="250"></canvas>
+  </div>
+
+</div>
+
+<div id="synapsePage">
+  <div id="synapseModelArea">
+    <div id="synapseView">
+      <div id="presynapticNeuron" class="neuronBox">
+        <span class="neuronLabel">Presynaptic neuron</span>
+      </div>
+      <div id="postsynapticNeuron" class="neuronBox">
+        <span class="neuronLabel">Postsynaptic neuron</span>
+      </div>
+      <img src="ca_closed.png" id="caTop" class="caChannel">
+      <img src="ca_closed.png" id="caBottom" class="caChannel">
+      <img src="ligand_closed.png" id="ligandChannel" class="ligandChannel">
+    </div>
+
+    <div id="synapseLegend">
+      <div><span class="synapse-legend-icon"><img src="ca_ion.png" class="legend-ion" alt=""></span><span class="synapse-legend-label">Ca ion</span></div>
+      <div><span class="synapse-legend-icon"><img src="ca_closed.png" class="legend-ca-channel" alt=""></span><span class="synapse-legend-label">Ca channel</span></div>
+      <div><span class="synapse-legend-icon"><span class="legend-vesicle"></span></span><span class="synapse-legend-label">Vesicle</span></div>
+      <div><span class="synapse-legend-icon"><img src="neurotransmitter.png" class="legend-neurotransmitter" alt=""></span><span class="synapse-legend-label">Neurotransmitter</span></div>
+      <div><span class="synapse-legend-icon"><img src="ligand_closed.png" class="legend-ligand-channel" alt=""></span><span class="synapse-legend-label">Ligand channel</span></div>
+      <div><span class="synapse-legend-icon"><img src="na_ion.png" class="legend-ion" alt=""></span><span class="synapse-legend-label">Na ion</span></div>
+    </div>
+  </div>
+
+  <div id="synapseControls">
+    <button onclick="showActionPotentialPage()">Back to Action Potential</button>
+    <button id="openCaButton" onclick="openCaChannels()">Open Ca Channels</button>
+    <button onclick="resetSynapse()">Reset</button>
+  </div>
+
+  <div id="synapseGraphArea">
+    <div id="synapseVoltageReadout">Voltage: -70 mV</div>
+    <div id="synapseGraphWrap">
+      <canvas id="synapseGraph" width="700" height="250"></canvas>
+    </div>
+  </div>
+</div>
+
+<style>
+#modelArea {
+  width: 900px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+#cell {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  margin: 0;
+  border: 2px solid black;
+}
+
+#outside {
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  z-index: 4;
+}
+
+#inside {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  z-index: 4;
+}
+
+#controls {
+  margin: 18px 0 8px;
+}
+
+button {
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#graphArea,
+#synapseGraphArea {
+  width: 700px;
+  margin: 24px auto 0;
+}
+
+#graphWrap,
+#synapseGraphWrap {
+  width: 700px;
+  margin: 0 auto;
+  text-align: left;
+  overflow-x: auto;
+}
+
+#voltageReadout,
+#synapseVoltageReadout {
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #b00020;
+  text-align: center;
+}
+
+#graph,
+#synapseGraph {
+  border: 2px solid black;
+  background-color: white;
+  display: block;
+}
+
+#legend {
+  width: 210px;
+  height: 420px;
+  box-sizing: border-box;
+  border: 2px solid black;
+  padding: 12px;
+  text-align: left;
+  font-size: 18px;
+  background: white;
+  overflow: hidden;
+}
+
+#legend div {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 4px;
+  min-height: 76px;
+}
+
+#legend img {
+  width: 215px;
+  height: 90px;
+  object-fit: contain;
+  flex: 0 0 100px;
+  margin-left: -58px;
+}
+
+#legend img.legend-ion {
+  width: 260px;
+  height: 115px;
+  flex-basis: 112px;
+  margin-left: -78px;
+}
+
+.legend-ion-label {
+  margin-left: -26px;
+}
+
+#synapsePage {
+  display: none;
+}
+
+#synapseModelArea {
+  width: 1160px;
+  margin: 18px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+#synapseView {
+  width: 900px;
+  height: 520px;
+  margin: 0;
+  border: 2px solid black;
+  background: #f8fbff;
+  overflow: hidden;
+}
+
+#synapseLegend {
+  width: 210px;
+  height: 520px;
+  border: 2px solid black;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: left;
+  font-size: 15px;
+  overflow: hidden;
+}
+
+#synapseLegend div {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 4px;
+  min-height: 78px;
+}
+
+.synapse-legend-icon {
+  position: relative;
+  width: 104px;
+  height: 78px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+#synapseLegend img {
+  position: absolute;
+  width: 215px;
+  height: 90px;
+  object-fit: contain;
+  left: -58px;
+  top: -6px;
+}
+
+#synapseLegend img.legend-neurotransmitter {
+  width: 215px;
+  height: 90px;
+  left: -58px;
+  top: -6px;
+}
+
+#synapseLegend img.legend-ion {
+  width: 260px;
+  height: 115px;
+  left: -78px;
+  top: -18px;
+}
+
+#synapseLegend img.legend-ca-channel {
+  left: -28px;
+}
+
+#synapseLegend img.legend-ligand-channel {
+  left: -58px;
+}
+
+#synapseLegend .synapse-legend-label {
+  display: inline-block;
+  width: 96px;
+}
+
+.legend-vesicle {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border: 2px solid #7c4d96;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.72);
+  left: 18px;
+  top: 13px;
+}
+
+#synapseControls {
+  margin: 18px 0;
+}
+
+#synapseGraphArea {
+  margin-top: 10px;
+}
+
+.neuronBox {
+  position: absolute;
+  top: 140px;
+  width: 360px;
+  height: 240px;
+  border: 4px solid #2f5d8c;
+  background: #dcecff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1f3f60;
+  font-size: 20px;
+  font-weight: bold;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+#presynapticNeuron {
+  left: -70px;
+  overflow: hidden;
+}
+
+#postsynapticNeuron {
+  right: -70px;
+}
+
+.neuronLabel {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.vesicle {
+  position: absolute;
+  width: 58px;
+  height: 58px;
+  border: 3px solid #7c4d96;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+.vesicle img {
+  position: absolute;
+  width: 30px;
+  height: auto;
+}
+
+.caChannel {
+  position: absolute;
+  width: 200px;
+  left: 90px;
+  transform: translateY(-50%);
+  z-index: 5;
+}
+
+.caIon {
+  position: absolute;
+  width: 44px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+}
+
+.releasedNeurotransmitter {
+  position: absolute;
+  width: 30px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+}
+
+.ligandChannel {
+  position: absolute;
+  width: 220px;
+  left: 501px;
+  top: 207px;
+  z-index: 5;
+}
+
+.synapseNaIon {
+  position: absolute;
+  width: 130px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+}
+
+#synapseView {
+  position: relative;
+}
+
+#caTop {
+  top: 140px;
+}
+
+#caBottom {
+  top: 380px;
+}
+
+</style>
+
+<script>
+  const pumpX = 300;
+  const insideY = 260;
+  const pumpY = 200;
+  const outsideY = 120;
+  const naChannelCenterX = 200;
+  const kChannelCenterX = 400;
+  let animationRun = 0;
+  let activeTimers = [];
+  let caAnimationRunning = false;
+  let vesicleAnimationRunning = false;
+  let ligandChannelOpened = false;
+  let neurotransmitterBindCount = 0;
+  let synapseNaAnimationRunning = false;
+  let synapseVoltage = -70;
+  let synapseGraphX = 50;
+  let synapseVoltageResponseStarted = false;
+
+function showSynapsePage() {
+  document.querySelector("h2").textContent = "Synapse";
+  document.getElementById("modelArea").style.display = "none";
+  document.getElementById("controls").style.display = "none";
+  document.getElementById("graphArea").style.display = "none";
+  document.getElementById("synapsePage").style.display = "block";
+  createSynapseCaIons();
+  createSynapseVesicles();
+  createSynapseNaIons();
+  resetLigandChannel();
+  resetSynapseGraph();
+}
+
+function showActionPotentialPage() {
+  document.querySelector("h2").textContent = "Resting Potential";
+  document.getElementById("modelArea").style.display = "flex";
+  document.getElementById("controls").style.display = "block";
+  document.getElementById("graphArea").style.display = "block";
+  document.getElementById("synapsePage").style.display = "none";
+}
+
+function scheduleTimeout(callback, delay) {
+  let timer = setTimeout(() => {
+    activeTimers = activeTimers.filter((activeTimer) => activeTimer !== timer);
+    callback();
+  }, delay);
+
+  activeTimers.push(timer);
+}
+
+function offsetPosition(x, y, ionNumber, runNumber) {
+  let runX = ((runNumber % 5) - 2) * 8;
+  let runY = ((Math.floor(runNumber / 5) % 3) - 1) * 8;
+  let ionX = (ionNumber - 2) * 5;
+
+  return {
+    x: x + runX + ionX,
+    y: y + runY
+  };
+}
+
+function createIon(type, x, y) {
+  let ion = document.createElement("img");
+
+  ion.src = type === "na" ? "na_ion.png" : "k_ion.png";
+  ion.dataset.ionType = type;
+  ion.dataset.location = "";
+
+  ion.style.position = "absolute";
+  ion.className = "ion";
+  ion.style.zIndex = "2";
+  ion.style.left = x + "px";
+  ion.style.top = y + "px";
+
+  ion.style.width = "200px";
+  ion.style.height = "auto";
+  ion.style.transform = "translate(-50%, -50%)";
+
+  document.getElementById("cell").appendChild(ion);
+
+  return ion;
+}
+
+function setIonPosition(ion, x, y) {
+  ion.style.left = x + "px";
+  ion.style.top = y + "px";
+}
+
+function createInitialIon(type, x, y, location) {
+  let ion = createIon(type, x, y);
+  ion.dataset.location = location;
+  return ion;
+}
+
+function selectIons(type, location, count) {
+  return Array.from(document.querySelectorAll('.ion[data-ion-type="' + type + '"][data-location="' + location + '"]')).slice(0, count);
+}
+
+function selectIonsToBalance(type, fromLocation, toLocation) {
+  let fromIons = Array.from(document.querySelectorAll('.ion[data-ion-type="' + type + '"][data-location="' + fromLocation + '"]'));
+  let toIons = Array.from(document.querySelectorAll('.ion[data-ion-type="' + type + '"][data-location="' + toLocation + '"]'));
+  let moveCount = Math.ceil((fromIons.length - toIons.length) / 2);
+
+  if (moveCount <= 0) {
+    return [];
+  }
+
+  return fromIons.slice(0, moveCount);
+}
+
+function createInitialIons() {
+  document.querySelectorAll(".ion").forEach((ion) => ion.remove());
+
+  [
+    [80, 80], [150, 115], [230, 85], [320, 120], [420, 80], [510, 115],
+    [95, 160], [200, 135], [360, 155], [500, 145]
+  ].forEach((point) => createInitialIon("na", point[0], point[1], "outside"));
+
+  [
+    [115, 300], [205, 340], [300, 305], [405, 345], [505, 310]
+  ].forEach((point) => createInitialIon("na", point[0], point[1], "inside"));
+
+  [
+    [100, 95], [260, 145], [380, 105], [540, 150], [455, 125]
+  ].forEach((point) => createInitialIon("k", point[0], point[1], "outside"));
+
+  [
+    [75, 330], [150, 275], [240, 350], [330, 295], [420, 345], [520, 285],
+    [105, 365], [285, 270], [470, 365], [555, 330]
+  ].forEach((point) => createInitialIon("k", point[0], point[1], "inside"));
+}
+
+
+function moveTo(ion, x, y, duration) {
+  let start = null;
+
+  let x0 = parseFloat(ion.style.left);
+  let y0 = parseFloat(ion.style.top);
+
+  function step(t) {
+    if (!start) start = t;
+    let p = (t - start) / duration;
+
+    if (p < 1) {
+      ion.style.left = x0 + (x - x0) * p + "px";
+      ion.style.top = y0 + (y - y0) * p + "px";
+      requestAnimationFrame(step);
+    } else {
+      ion.style.left = x + "px";
+      ion.style.top = y + "px";
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+function animateElementTo(element, x, y, duration, onDone) {
+  let start = null;
+  let x0 = parseFloat(element.style.left);
+  let y0 = parseFloat(element.style.top);
+
+  function step(t) {
+    if (!start) start = t;
+    let p = Math.min((t - start) / duration, 1);
+
+    element.style.left = x0 + (x - x0) * p + "px";
+    element.style.top = y0 + (y - y0) * p + "px";
+
+    if (p < 1) {
+      requestAnimationFrame(step);
+    } else if (onDone) {
+      onDone();
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+function synapseVoltageToY(v) {
+  return 220 - ((v + 90) / 140) * 200;
+}
+
+function drawSynapseAxes() {
+  let synapseCanvas = document.getElementById("synapseGraph");
+  let synapseCtx = synapseCanvas.getContext("2d");
+
+  synapseCtx.clearRect(0, 0, synapseCanvas.width, synapseCanvas.height);
+  synapseCtx.strokeStyle = "black";
+  synapseCtx.lineWidth = 1;
+  synapseCtx.setLineDash([]);
+
+  synapseCtx.beginPath();
+  synapseCtx.moveTo(50, 20);
+  synapseCtx.lineTo(50, 220);
+  synapseCtx.stroke();
+
+  synapseCtx.beginPath();
+  synapseCtx.moveTo(50, 220);
+  synapseCtx.lineTo(650, 220);
+  synapseCtx.stroke();
+
+  synapseCtx.font = "16px Arial";
+  synapseCtx.fillStyle = "black";
+  synapseCtx.fillText("Voltage (mV)", 10, 20);
+  synapseCtx.fillText("Time", 620, 240);
+  synapseCtx.fillText("-50", 5, synapseVoltageToY(-50) + 5);
+  synapseCtx.fillText("-70", 5, synapseVoltageToY(-70) + 5);
+  synapseCtx.fillText("-80", 5, synapseVoltageToY(-80) + 5);
+
+  synapseCtx.beginPath();
+  synapseCtx.moveTo(50, synapseVoltageToY(-50));
+  synapseCtx.lineTo(650, synapseVoltageToY(-50));
+  synapseCtx.strokeStyle = "#777777";
+  synapseCtx.setLineDash([6, 6]);
+  synapseCtx.stroke();
+  synapseCtx.setLineDash([]);
+
+  synapseCtx.beginPath();
+  synapseCtx.moveTo(50, synapseVoltageToY(-70));
+  synapseCtx.lineTo(650, synapseVoltageToY(-70));
+  synapseCtx.strokeStyle = "#cccccc";
+  synapseCtx.setLineDash([6, 6]);
+  synapseCtx.stroke();
+  synapseCtx.setLineDash([]);
+}
+
+function plotSynapseVoltage(newVoltage) {
+  let synapseCanvas = document.getElementById("synapseGraph");
+  let synapseCtx = synapseCanvas.getContext("2d");
+
+  synapseCtx.beginPath();
+  synapseCtx.moveTo(synapseGraphX, synapseVoltageToY(synapseVoltage));
+  synapseGraphX += 80;
+  synapseCtx.lineTo(synapseGraphX, synapseVoltageToY(newVoltage));
+  synapseCtx.strokeStyle = "red";
+  synapseCtx.lineWidth = 3;
+  synapseCtx.setLineDash([]);
+  synapseCtx.stroke();
+
+  synapseVoltage = newVoltage;
+  document.getElementById("synapseVoltageReadout").textContent = "Voltage: " + synapseVoltage + " mV";
+}
+
+function resetSynapseGraph() {
+  let synapseCanvas = document.getElementById("synapseGraph");
+  synapseCanvas.width = 700;
+  synapseVoltage = -70;
+  synapseGraphX = 50;
+  synapseVoltageResponseStarted = false;
+  document.getElementById("synapseVoltageReadout").textContent = "Voltage: -70 mV";
+  drawSynapseAxes();
+}
+
+function startSynapseVoltageResponse() {
+  if (synapseVoltageResponseStarted) {
+    return;
+  }
+
+  synapseVoltageResponseStarted = true;
+  plotSynapseVoltage(-58);
+
+  scheduleTimeout(() => {
+    plotSynapseVoltage(-70);
+  }, 700);
+}
+
+function resetLigandChannel() {
+  document.getElementById("ligandChannel").src = "ligand_closed.png";
+  ligandChannelOpened = false;
+  neurotransmitterBindCount = 0;
+  synapseNaAnimationRunning = false;
+}
+
+function createSynapseNaIon(x, y, channelX, channelY, endX, endY) {
+  let ion = document.createElement("img");
+  ion.src = "na_ion.png";
+  ion.className = "synapseNaIon";
+  ion.dataset.channelX = channelX;
+  ion.dataset.channelY = channelY;
+  ion.dataset.endX = endX;
+  ion.dataset.endY = endY;
+  ion.style.left = x + "px";
+  ion.style.top = y + "px";
+  document.getElementById("synapseView").appendChild(ion);
+  return ion;
+}
+
+function createSynapseNaIons() {
+  document.querySelectorAll(".synapseNaIon").forEach((ion) => ion.remove());
+
+  [
+    [380, 176, 610, 260, 710, 214],
+    [430, 214, 610, 260, 760, 248],
+    [480, 178, 610, 260, 808, 292],
+    [390, 326, 610, 260, 716, 326],
+    [450, 298, 610, 260, 770, 356],
+    [505, 338, 610, 260, 826, 226]
+  ].forEach((point) => createSynapseNaIon(point[0], point[1], point[2], point[3], point[4], point[5]));
+}
+
+function openLigandChannel() {
+  if (ligandChannelOpened) {
+    return;
+  }
+
+  ligandChannelOpened = true;
+  document.getElementById("ligandChannel").src = "ligand_open.png";
+  moveSynapseNaIons();
+}
+
+function handleNeurotransmitterBound() {
+  neurotransmitterBindCount++;
+
+  if (neurotransmitterBindCount >= 3) {
+    openLigandChannel();
+  }
+}
+
+function moveSynapseNaIons() {
+  if (synapseNaAnimationRunning) {
+    return;
+  }
+
+  synapseNaAnimationRunning = true;
+  let naIons = Array.from(document.querySelectorAll(".synapseNaIon"));
+  let finishedCount = 0;
+
+  if (naIons.length === 0) {
+    createSynapseNaIons();
+    naIons = Array.from(document.querySelectorAll(".synapseNaIon"));
+  }
+
+  naIons.forEach((ion, index) => {
+    scheduleTimeout(() => {
+      animateElementTo(ion, parseFloat(ion.dataset.channelX), parseFloat(ion.dataset.channelY), 700, () => {
+        if (index === 0) {
+          startSynapseVoltageResponse();
+        }
+
+        animateElementTo(ion, parseFloat(ion.dataset.endX), parseFloat(ion.dataset.endY), 800, () => {
+          finishedCount++;
+
+          if (finishedCount === naIons.length) {
+            synapseNaAnimationRunning = false;
+            document.getElementById("openCaButton").disabled = false;
+          }
+        });
+      });
+    }, index * 120);
+  });
+}
+
+function resetSynapse() {
+  activeTimers.forEach((timer) => clearTimeout(timer));
+  activeTimers = [];
+  caAnimationRunning = false;
+  vesicleAnimationRunning = false;
+  synapseNaAnimationRunning = false;
+
+  document.getElementById("caTop").src = "ca_closed.png";
+  document.getElementById("caBottom").src = "ca_closed.png";
+  document.getElementById("openCaButton").disabled = false;
+
+  createSynapseCaIons();
+  createSynapseVesicles();
+  createSynapseNaIons();
+  resetLigandChannel();
+  resetSynapseGraph();
+}
+
+function createSynapseVesicle(x, y, releaseY) {
+  let vesicle = document.createElement("div");
+
+  vesicle.className = "vesicle";
+  vesicle.dataset.startX = x;
+  vesicle.dataset.startY = y;
+  vesicle.dataset.releaseY = releaseY;
+  vesicle.style.left = x + "px";
+  vesicle.style.top = y + "px";
+
+  [
+    [14, 20],
+    [30, 20],
+    [22, 34],
+    [14, 38],
+    [32, 38]
+  ].forEach((point) => {
+    let transmitter = document.createElement("img");
+    transmitter.src = "neurotransmitter.png";
+    transmitter.style.left = point[0] + "px";
+    transmitter.style.top = point[1] + "px";
+    vesicle.appendChild(transmitter);
+  });
+
+  document.getElementById("presynapticNeuron").appendChild(vesicle);
+
+  return vesicle;
+}
+
+function createSynapseVesicles() {
+  document.querySelectorAll(".vesicle").forEach((vesicle) => vesicle.remove());
+  document.querySelectorAll(".releasedNeurotransmitter").forEach((transmitter) => transmitter.remove());
+  vesicleAnimationRunning = false;
+
+  [
+    [185, 78, 222],
+    [235, 126, 258],
+    [160, 165, 294],
+    [245, 190, 330]
+  ].forEach((point) => createSynapseVesicle(point[0], point[1], point[2]));
+}
+
+function releaseNeurotransmitters(y, index) {
+  let startX = 292;
+  let targets = [
+    [588, 262],
+    [592, 264],
+    [590, 268]
+  ];
+
+  targets.forEach((target, targetIndex) => {
+    let transmitter = document.createElement("img");
+    transmitter.src = "neurotransmitter.png";
+    transmitter.className = "releasedNeurotransmitter";
+    transmitter.style.left = startX + "px";
+    transmitter.style.top = y + "px";
+    document.getElementById("synapseView").appendChild(transmitter);
+
+    scheduleTimeout(() => {
+      animateElementTo(transmitter, target[0], target[1], 900, handleNeurotransmitterBound);
+    }, index * 90 + targetIndex * 80);
+  });
+}
+
+function moveSynapseVesicles() {
+  if (vesicleAnimationRunning) {
+    return;
+  }
+
+  vesicleAnimationRunning = true;
+  let vesicles = Array.from(document.querySelectorAll(".vesicle"));
+  let finishedCount = 0;
+
+  if (vesicles.length === 0) {
+    createSynapseVesicles();
+    vesicles = Array.from(document.querySelectorAll(".vesicle"));
+  }
+
+  vesicles.forEach((vesicle, index) => {
+    scheduleTimeout(() => {
+      animateElementTo(vesicle, 388, parseFloat(vesicle.dataset.startY), 900, () => {
+        releaseNeurotransmitters(parseFloat(vesicle.dataset.releaseY), index);
+        finishedCount++;
+
+        if (finishedCount === vesicles.length) {
+          vesicleAnimationRunning = false;
+        }
+      });
+    }, index * 140);
+  });
+}
+
+function createSynapseCaIon(x, y, channelX, channelY, endX, endY) {
+  let ion = document.createElement("img");
+  ion.src = "ca_ion.png";
+  ion.className = "caIon";
+  ion.dataset.startX = x;
+  ion.dataset.startY = y;
+  ion.dataset.channelX = channelX;
+  ion.dataset.channelY = channelY;
+  ion.dataset.endX = endX;
+  ion.dataset.endY = endY;
+  ion.style.left = x + "px";
+  ion.style.top = y + "px";
+  document.getElementById("synapseView").appendChild(ion);
+  return ion;
+}
+
+function createSynapseCaIons() {
+  document.querySelectorAll(".caIon").forEach((ion) => ion.remove());
+
+  [
+    [130, 58, 144, 140, 130, 178],
+    [190, 48, 144, 140, 190, 188],
+    [250, 64, 144, 140, 250, 170],
+    [135, 462, 144, 380, 135, 342],
+    [200, 472, 144, 380, 200, 332],
+    [255, 456, 144, 380, 255, 350]
+  ].forEach((point) => createSynapseCaIon(point[0], point[1], point[2], point[3], point[4], point[5]));
+}
+
+function animateSynapseCaIonTo(ion, x, y, duration, onDone) {
+  let start = null;
+  let x0 = parseFloat(ion.style.left);
+  let y0 = parseFloat(ion.style.top);
+
+  function step(t) {
+    if (!start) start = t;
+    let p = Math.min((t - start) / duration, 1);
+
+    ion.style.left = x0 + (x - x0) * p + "px";
+    ion.style.top = y0 + (y - y0) * p + "px";
+
+    if (p < 1) {
+      requestAnimationFrame(step);
+    } else {
+      onDone();
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+function moveSynapseCaIon(ion, onDone) {
+  animateSynapseCaIonTo(
+    ion,
+    parseFloat(ion.dataset.channelX),
+    parseFloat(ion.dataset.channelY),
+    700,
+    () => {
+      animateSynapseCaIonTo(
+        ion,
+        parseFloat(ion.dataset.endX),
+        parseFloat(ion.dataset.endY),
+        800,
+        onDone
+      );
+    }
+  );
+}
+
+const canvas = document.getElementById("graph");
+const ctx = canvas.getContext("2d");
+const voltageReadout = document.getElementById("voltageReadout");
+
+let graphX = 50;
+let voltage = -70;
+let graphReady = false;
+let graphStarted = false;
+
+function drawAxes() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 1;
+
+  // y-axis
+  ctx.beginPath();
+  ctx.moveTo(50, 20);
+  ctx.lineTo(50, 220);
+  ctx.stroke();
+
+  // x-axis
+  ctx.beginPath();
+  ctx.moveTo(50, 220);
+  ctx.lineTo(650, 220);
+  ctx.stroke();
+
+  // labels
+  ctx.font = "16px Arial";
+  ctx.fillText("Voltage (mV)", 10, 20);
+  ctx.fillText("Time", 620, 240);
+
+  ctx.fillText("+40", 10, voltageToY(40) + 5);
+  ctx.fillText("0", 20, voltageToY(0) + 5);
+  ctx.fillText("-70", 5, voltageToY(-70) + 5);
+  ctx.fillText("-80", 5, voltageToY(-80) + 5);
+
+  ctx.beginPath();
+  ctx.moveTo(50, voltageToY(-70));
+  ctx.lineTo(650, voltageToY(-70));
+  ctx.strokeStyle = "#cccccc";
+  ctx.setLineDash([6, 6]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  graphReady = true;
+}
+
+function voltageToY(v) {
+  return 220 - ((v + 90) / 140) * 200;
+}
+
+function extendGraphIfNeeded() {
+  if (graphX + 40 <= canvas.width - 50) {
+    return;
+  }
+
+  let oldWidth = canvas.width;
+  let oldImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+  canvas.width += 400;
+  ctx.putImageData(oldImage, 0, 0);
+
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(oldWidth - 50, 220);
+  ctx.lineTo(canvas.width - 50, 220);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(oldWidth - 50, voltageToY(-70));
+  ctx.lineTo(canvas.width - 50, voltageToY(-70));
+  ctx.strokeStyle = "#cccccc";
+  ctx.setLineDash([6, 6]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "black";
+  ctx.fillText("Time", canvas.width - 80, 240);
+}
+
+function plotVoltage(newVoltage) {
+  if (!graphReady) drawAxes();
+  extendGraphIfNeeded();
+
+  ctx.beginPath();
+  ctx.moveTo(graphX, voltageToY(voltage));
+
+  graphX += 40;
+
+  ctx.lineTo(graphX, voltageToY(newVoltage));
+  ctx.strokeStyle = "red";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  voltage = newVoltage;
+  voltageReadout.textContent = "Voltage: " + voltage + " mV";
+  updateChargeLabels(voltage);
+  graphStarted = true;
+  document.getElementById("graphWrap").scrollLeft = canvas.width;
+}
+
+function prepareGraph(startVoltage) {
+  if (!graphStarted) {
+    drawAxes();
+    graphX = 50;
+    graphStarted = false;
+  }
+
+  voltage = startVoltage;
+  voltageReadout.textContent = "Voltage: " + voltage + " mV";
+  updateChargeLabels(voltage);
+}
+
+function updateChargeLabels(currentVoltage) {
+  let outside = document.getElementById("outside");
+  let inside = document.getElementById("inside");
+
+  if (currentVoltage > 0) {
+    outside.textContent = "Outside (- - -)";
+    inside.textContent = "Inside (+ + +)";
+  } else if (currentVoltage < -70) {
+    outside.textContent = "Outside (+ + + +)";
+    inside.textContent = "Inside (- - - -)";
+  } else if (currentVoltage > -70) {
+    outside.textContent = "Outside (+ +)";
+    inside.textContent = "Inside (- -)";
+  } else {
+    outside.textContent = "Outside (+ + +)";
+    inside.textContent = "Inside (- - -)";
+  }
+}
+
+function startAnimation() {
+
+  let runNumber = animationRun;
+  animationRun++;
+
+  prepareGraph(voltage);
+  
+  let pump = document.getElementById("pump");
+
+let naEnd1 = offsetPosition(270, outsideY, 1, runNumber);
+let naEnd2 = offsetPosition(290, outsideY, 2, runNumber);
+let naEnd3 = offsetPosition(310, outsideY, 3, runNumber);
+let selectedNa = selectIons("na", "inside", 3);
+
+if (selectedNa.length < 3) {
+  return;
+}
+
+let na1 = selectedNa[0];
+let na2 = selectedNa[1];
+let na3 = selectedNa[2];
+
+// 1. 进入 pump（必须停住）
+  moveTo(na1, pumpX, pumpY, 800);
+  moveTo(na2, pumpX, pumpY, 800);
+  moveTo(na3, pumpX, pumpY, 800);
+  na1.dataset.location = "pump";
+  na2.dataset.location = "pump";
+  na3.dataset.location = "pump";
+  plotVoltage(voltage);
+
+  scheduleTimeout(() => {
+
+    pump.src = "pump_outside.png";
+
+    // 2. 从 pump 出去
+    moveTo(na1, naEnd1.x, naEnd1.y, 800);
+    moveTo(na2, naEnd2.x, naEnd2.y, 800);
+    moveTo(na3, naEnd3.x, naEnd3.y, 800);
+    plotVoltage(voltage);
+
+    scheduleTimeout(() => {
+      na1.dataset.location = "outside";
+      na2.dataset.location = "outside";
+      na3.dataset.location = "outside";
+    }, 800);
+
+  }, 900);
+
+    scheduleTimeout(() => {
+
+    let kEnd1 = offsetPosition(270, insideY, 1, runNumber);
+    let kEnd2 = offsetPosition(310, insideY, 2, runNumber);
+    let selectedK = selectIons("k", "outside", 2);
+
+    if (selectedK.length < 2) {
+      return;
+    }
+
+    let k1 = selectedK[0];
+    let k2 = selectedK[1];
+
+    // → pump
+    moveTo(k1, pumpX, pumpY, 800);
+    moveTo(k2, pumpX, pumpY, 800);
+    k1.dataset.location = "pump";
+    k2.dataset.location = "pump";
+    plotVoltage(voltage);
+
+    scheduleTimeout(() => {
+
+      pump.src = "pump_inside.png";
+
+      // → inside
+      moveTo(k1, kEnd1.x, kEnd1.y, 800);
+      moveTo(k2, kEnd2.x, kEnd2.y, 800);
+      plotVoltage(voltage);
+
+      scheduleTimeout(() => {
+        k1.dataset.location = "inside";
+        k2.dataset.location = "inside";
+      }, 800);
+
+    }, 900);
+
+  }, 2500);
+
+}
+
+function startDepolarization() {
+  let runNumber = animationRun;
+  animationRun++;
+  let outsideNaIons = selectIonsToBalance("na", "outside", "inside");
+
+  if (outsideNaIons.length === 0) {
+    return;
+  }
+
+  prepareGraph(voltage);
+
+  let naChannel = document.getElementById("naChannel");
+  naChannel.src = "na_open.png";
+
+  outsideNaIons.forEach((ion) => {
+    ion.dataset.location = "channel";
+    moveTo(ion, naChannelCenterX, pumpY, 700);
+  });
+  plotVoltage(-30);
+
+  scheduleTimeout(() => {
+    outsideNaIons.forEach((ion, index) => {
+      let ionNumber = (index % 3) + 1;
+      let rowNumber = Math.floor(index / 3);
+      let endPosition = offsetPosition(180 + (ionNumber - 1) * 30, insideY + rowNumber * 12, ionNumber, runNumber);
+
+      moveTo(ion, endPosition.x, endPosition.y, 800);
+    });
+    plotVoltage(40);
+
+    scheduleTimeout(() => {
+      outsideNaIons.forEach((ion) => {
+        ion.dataset.location = "inside";
+      });
+    }, 800);
+  }, 800);
+
+  scheduleTimeout(() => {
+    naChannel.src = "na_closed.png";
+  }, 1800);
+}
+
+function startRepolarization() {
+  let runNumber = animationRun;
+  animationRun++;
+  let insideKIons = selectIonsToBalance("k", "inside", "outside");
+
+  if (insideKIons.length === 0) {
+    return;
+  }
+
+  prepareGraph(voltage);
+
+  let kChannel = document.getElementById("kChannel");
+  kChannel.src = "k_open.png";
+
+  insideKIons.forEach((ion) => {
+    ion.dataset.location = "channel";
+    moveTo(ion, kChannelCenterX, pumpY, 700);
+  });
+  plotVoltage(0);
+
+  scheduleTimeout(() => {
+    insideKIons.forEach((ion, index) => {
+      let ionNumber = (index % 2) + 1;
+      let rowNumber = Math.floor(index / 2);
+      let endPosition = offsetPosition(390 + (ionNumber - 1) * 40, outsideY - rowNumber * 12, ionNumber, runNumber);
+
+      moveTo(ion, endPosition.x, endPosition.y, 800);
+    });
+    plotVoltage(-80);
+
+    scheduleTimeout(() => {
+      insideKIons.forEach((ion) => {
+        ion.dataset.location = "outside";
+      });
+      plotVoltage(-70);
+    }, 800);
+  }, 800);
+
+  scheduleTimeout(() => {
+    kChannel.src = "k_closed.png";
+  }, 1800);
+}
+
+function resetModel() {
+  activeTimers.forEach((timer) => clearTimeout(timer));
+  activeTimers = [];
+  animationRun = 0;
+
+  document.querySelectorAll(".ion").forEach((ion) => ion.remove());
+
+  document.getElementById("pump").src = "pump_inside.png";
+  document.getElementById("naChannel").src = "na_closed.png";
+  document.getElementById("kChannel").src = "k_closed.png";
+  createInitialIons();
+
+  graphX = 50;
+  voltage = -70;
+  graphStarted = false;
+  canvas.width = 700;
+  voltageReadout.textContent = "Voltage: -70 mV";
+  updateChargeLabels(voltage);
+  drawAxes();
+  plotVoltage(-70);
+}
+
+function openCaChannels() {
+  if (caAnimationRunning) {
+    return;
+  }
+
+  createSynapseCaIons();
+  createSynapseVesicles();
+  createSynapseNaIons();
+  resetLigandChannel();
+
+  document.getElementById("caTop").src = "ca_open.png";
+  document.getElementById("caBottom").src = "ca_open.png";
+  document.getElementById("openCaButton").disabled = true;
+  caAnimationRunning = true;
+
+  let caIons = Array.from(document.querySelectorAll(".caIon"));
+  let finishedCount = 0;
+
+  if (caIons.length === 0) {
+    createSynapseCaIons();
+    caIons = Array.from(document.querySelectorAll(".caIon"));
+  }
+
+  caIons.forEach((ion, index) => {
+    scheduleTimeout(() => {
+      moveSynapseCaIon(ion, () => {
+        finishedCount++;
+
+        if (finishedCount === caIons.length) {
+          closeCaChannels(false);
+          moveSynapseVesicles();
+        }
+      });
+    }, index * 120);
+  });
+
+}
+
+function closeCaChannels(enableButton = true) {
+
+  document.getElementById("caTop").src = "ca_closed.png";
+  document.getElementById("caBottom").src = "ca_closed.png";
+  document.getElementById("openCaButton").disabled = !enableButton;
+  caAnimationRunning = false;
+
+}
+
+createInitialIons();
+createSynapseCaIons();
+createSynapseVesicles();
+createSynapseNaIons();
+resetLigandChannel();
+resetSynapseGraph();
+drawAxes();
+plotVoltage(-70);
+</script>
+</body>
+</html>
