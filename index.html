@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <style>
     body {
       text-align: center;
@@ -92,12 +93,120 @@
 </div>
 </div>
 
+<div id="pumpQuiz" class="quiz-panel">
+  <p class="quiz-question">Does this process require ATP?</p>
+  <button class="quiz-option" onclick="answerPumpQuiz()">
+    <span class="quiz-marker" id="pumpQuizMarkerNo"></span>
+    <span>No, because this is an example of passive transport.</span>
+  </button>
+  <button class="quiz-option" onclick="answerPumpQuiz()">
+    <span class="quiz-marker" id="pumpQuizMarkerYes"></span>
+    <span>Yes, because the ions are moving against their concentration gradients.</span>
+  </button>
+  <button id="showPumpAgainButton" onclick="replayPumpAnimation('pumpQuiz')">Show me again</button>
+  <button id="pumpQuizNextButton" onclick="completePumpQuiz()">Next</button>
+</div>
+
+<div id="chargeQuiz" class="quiz-panel">
+  <p class="quiz-question">How does the sodium-potassium pump affect charge across the membrane?</p>
+  <button class="quiz-option" onclick="answerChargeQuiz()">
+    <span class="quiz-marker" id="chargeQuizMarkerNoEffect"></span>
+    <span>No effect, because the pump moves ions in and out at the same time.</span>
+  </button>
+  <button class="quiz-option" onclick="answerChargeQuiz()">
+    <span class="quiz-marker" id="chargeQuizMarkerPositiveInside"></span>
+    <span>The inside becomes more positive while the outside becomes more negative.</span>
+  </button>
+  <button class="quiz-option" onclick="answerChargeQuiz()">
+    <span class="quiz-marker" id="chargeQuizMarkerNegativeInside"></span>
+    <span>The inside becomes more negative while the outside becomes more positive.</span>
+  </button>
+  <button id="showPumpAgainButton2" onclick="replayPumpAnimation('chargeQuiz')">Show me again</button>
+  <button id="chargeQuizNextButton" onclick="completeChargeQuiz()">Next</button>
+</div>
+
+<div id="sodiumQuiz" class="quiz-panel">
+  <p class="quiz-question">If sodium channels open, how will Na<sup>+</sup> ions move?</p>
+  <button class="quiz-option" onclick="answerSodiumQuiz()">
+    <span class="quiz-marker" id="sodiumQuizMarkerIntoCell"></span>
+    <span>Na<sup>+</sup> ions move into the cell down their concentration gradient.</span>
+  </button>
+  <button class="quiz-option" onclick="answerSodiumQuiz()">
+    <span class="quiz-marker" id="sodiumQuizMarkerOutCell"></span>
+    <span>Na<sup>+</sup> ions move out of the cell against their concentration gradient.</span>
+  </button>
+  <button id="sodiumQuizNextButton" onclick="completeSodiumQuiz()">Next</button>
+</div>
+
+<div id="depolarizationQuiz" class="quiz-panel">
+  <p class="quiz-question">How does Na<sup>+</sup> influx affect membrane potential?</p>
+  <button class="quiz-option" onclick="answerDepolarizationQuiz()">
+    <span class="quiz-marker" id="depolarizationQuizMarkerNoChange"></span>
+    <span>No change in membrane potential.</span>
+  </button>
+  <button class="quiz-option" onclick="answerDepolarizationQuiz()">
+    <span class="quiz-marker" id="depolarizationQuizMarkerPositive"></span>
+    <span>The membrane potential becomes more positive.</span>
+  </button>
+  <button class="quiz-option" onclick="answerDepolarizationQuiz()">
+    <span class="quiz-marker" id="depolarizationQuizMarkerNegative"></span>
+    <span>The membrane potential becomes more negative.</span>
+  </button>
+  <button id="showDepolarizationAgainButton" onclick="replayDepolarizationAnimation()">Show me again</button>
+  <button id="depolarizationQuizNextButton" onclick="completeDepolarizationQuiz()">Next</button>
+</div>
+
+<div id="potassiumQuiz" class="quiz-panel">
+  <p class="quiz-question">How does depolarization affect K<sup>+</sup> channels?</p>
+  <button class="quiz-option" onclick="answerPotassiumQuiz()">
+    <span class="quiz-marker" id="potassiumQuizMarkerOpen"></span>
+    <span>Voltage-gated K<sup>+</sup> channels open in response to the change in membrane voltage.</span>
+  </button>
+  <button class="quiz-option" onclick="answerPotassiumQuiz()">
+    <span class="quiz-marker" id="potassiumQuizMarkerLigand"></span>
+    <span>K<sup>+</sup> channels will not respond because they require a ligand to bind.</span>
+  </button>
+  <button id="potassiumQuizNextButton" onclick="completePotassiumQuiz()">Next</button>
+</div>
+
+<div id="repolarizationQuiz" class="quiz-panel">
+  <p class="quiz-question">What effect does K<sup>+</sup> efflux have on membrane potential?</p>
+  <button class="quiz-option" onclick="answerRepolarizationQuiz()">
+    <span class="quiz-marker" id="repolarizationQuizMarkerPositive"></span>
+    <span>The membrane potential becomes more positive.</span>
+  </button>
+  <button class="quiz-option" onclick="answerRepolarizationQuiz()">
+    <span class="quiz-marker" id="repolarizationQuizMarkerNegative"></span>
+    <span>The membrane potential becomes more negative again.</span>
+  </button>
+  <button class="quiz-option" onclick="answerRepolarizationQuiz()">
+    <span class="quiz-marker" id="repolarizationQuizMarkerSame"></span>
+    <span>The membrane potential stays the same.</span>
+  </button>
+  <button id="showRepolarizationAgainButton" onclick="replayRepolarizationAnimation()">Show me again</button>
+  <button id="repolarizationQuizNextButton" onclick="completeRepolarizationQuiz()">Next</button>
+</div>
+
+<div id="hyperpolarizationQuiz" class="quiz-panel">
+  <p class="quiz-question">Why does hyperpolarization occur?</p>
+  <button class="quiz-option" onclick="answerHyperpolarizationQuiz()">
+    <span class="quiz-marker" id="hyperpolarizationQuizMarkerNa"></span>
+    <span>Na<sup>+</sup> channels remain open too long.</span>
+  </button>
+  <button class="quiz-option" onclick="answerHyperpolarizationQuiz()">
+    <span class="quiz-marker" id="hyperpolarizationQuizMarkerK"></span>
+    <span>K<sup>+</sup> channels close slowly, allowing extra K<sup>+</sup> ions to leave the cell.</span>
+  </button>
+  <button id="showHyperpolarizationAgainButton" onclick="replayHyperpolarizationAnimation()">Show me again</button>
+  <button id="hyperpolarizationQuizNextButton" onclick="completeHyperpolarizationQuiz()">Next</button>
+</div>
+
 <div id="controls">
-  <button onclick="startAnimation()">Pump</button>
-  <button onclick="startDepolarization()">Depolarization</button>
-  <button onclick="startRepolarization()">Repolarization</button>
-  <button onclick="resetModel()">Reset</button>
-  <button onclick="showSynapsePage()">Synapse</button>
+  <button id="pumpButton" onclick="startAnimation()">Pump</button>
+  <button id="depolarizationButton" onclick="startDepolarization()">Depolarization</button>
+  <button id="repolarizationButton" onclick="startRepolarization()">Repolarization</button>
+  <button id="resetButton" onclick="resetModel()">Reset</button>
+  <button id="synapseButton" onclick="showSynapsePage()">Synapse</button>
 </div>
 
 <div id="graphArea">
@@ -128,14 +237,64 @@
       <div><span class="synapse-legend-icon"><span class="legend-vesicle"></span></span><span class="synapse-legend-label">Vesicle</span></div>
       <div><span class="synapse-legend-icon"><img src="neurotransmitter.png" class="legend-neurotransmitter" alt=""></span><span class="synapse-legend-label">Neurotransmitter</span></div>
       <div><span class="synapse-legend-icon"><img src="ligand_closed.png" class="legend-ligand-channel" alt=""></span><span class="synapse-legend-label">Ligand channel</span></div>
-      <div><span class="synapse-legend-icon"><img src="na_ion.png" class="legend-ion" alt=""></span><span class="synapse-legend-label">Na ion</span></div>
+      <div><span class="synapse-legend-icon"><img src="na_ion.png" class="legend-ion" alt=""></span><span class="synapse-legend-label" id="synapseIonLegendLabel">Na ion</span></div>
     </div>
   </div>
 
+  <div id="synapticTerminalQuiz" class="quiz-panel">
+    <p class="quiz-question">What happens when the action potential reaches the synaptic terminal?</p>
+    <button class="quiz-option" onclick="answerSynapticTerminalQuiz()">
+      <span class="quiz-marker" id="synapticTerminalQuizMarkerCa"></span>
+      <span>Voltage-gated Ca<sup>2+</sup> channels open, triggering neurotransmitter release.</span>
+    </button>
+    <button class="quiz-option" onclick="answerSynapticTerminalQuiz()">
+      <span class="quiz-marker" id="synapticTerminalQuizMarkerNa"></span>
+      <span>Na<sup>+</sup> channels reopen throughout the entire neuron.</span>
+    </button>
+    <button id="synapticTerminalQuizNextButton" onclick="completeSynapticTerminalQuiz()">Next</button>
+  </div>
+
+  <div id="neuronEffectQuiz" class="quiz-panel">
+    <p class="quiz-question">How would Na<sup>+</sup> influx affect the next neuron?</p>
+    <button class="quiz-option" onclick="answerNeuronEffectQuiz()">
+      <span class="quiz-marker" id="neuronEffectQuizMarkerLikely"></span>
+      <span>Na<sup>+</sup> influx makes the next neuron more likely to generate an action potential.</span>
+    </button>
+    <button class="quiz-option" onclick="answerNeuronEffectQuiz()">
+      <span class="quiz-marker" id="neuronEffectQuizMarkerLarger"></span>
+      <span>Na<sup>+</sup> influx causes the next neuron to generate a larger action potential.</span>
+    </button>
+    <button class="quiz-option" onclick="answerNeuronEffectQuiz()">
+      <span class="quiz-marker" id="neuronEffectQuizMarkerLess"></span>
+      <span>Na<sup>+</sup> influx makes the next neuron less likely to generate an action potential.</span>
+    </button>
+    <button id="showNeuronEffectAgainButton" onclick="replayOpenCaChannelsAnimation()">Show me again</button>
+    <button id="neuronEffectQuizNextButton" onclick="completeNeuronEffectQuiz()">Next</button>
+  </div>
+
+  <div id="negativeIonQuiz" class="quiz-panel">
+    <p class="quiz-question">What happens if a neurotransmitter opens a channel for a negatively charged ion?</p>
+    <button class="quiz-option" onclick="answerNegativeIonQuiz()">
+      <span class="quiz-marker" id="negativeIonQuizMarkerThreshold"></span>
+      <span>The ion influx lowers the threshold, making the neuron more likely to fire.</span>
+    </button>
+    <button class="quiz-option" onclick="answerNegativeIonQuiz()">
+      <span class="quiz-marker" id="negativeIonQuizMarkerNegative"></span>
+      <span>The influx makes the membrane potential more negative, making the neuron less likely to generate an action potential.</span>
+    </button>
+    <button class="quiz-option" onclick="answerNegativeIonQuiz()">
+      <span class="quiz-marker" id="negativeIonQuizMarkerCannot"></span>
+      <span>The ion cannot enter because only Na<sup>+</sup> and K<sup>+</sup> concentration gradients are maintained by active transport.</span>
+    </button>
+    <button id="negativeIonQuizNextButton" onclick="completeNegativeIonQuiz()">Next</button>
+  </div>
+
   <div id="synapseControls">
-    <button onclick="showActionPotentialPage()">Back to Action Potential</button>
+    <button id="backToActionPotentialButton" onclick="showActionPotentialPage()">Back to Action Potential</button>
     <button id="openCaButton" onclick="openCaChannels()">Open Ca Channels</button>
-    <button onclick="resetSynapse()">Reset</button>
+    <button id="showEpspButton" onclick="showSynapsePage()">EPSP</button>
+    <button id="showIpspButton" onclick="showInhibitorySynapsePage(true)">IPSP</button>
+    <button id="resetSynapseButton" onclick="resetSynapse()">Reset</button>
   </div>
 
   <div id="synapseGraphArea">
@@ -184,6 +343,101 @@
 
 #controls {
   margin: 18px 0 8px;
+}
+
+.quiz-panel {
+  display: none;
+  width: 620px;
+  margin: 18px auto 0;
+  text-align: left;
+}
+
+.quiz-question {
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin: 8px 0;
+  text-align: left;
+}
+
+.quiz-marker {
+  width: 22px;
+  flex: 0 0 22px;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1;
+  text-align: center;
+}
+
+.quiz-marker.incorrect {
+  color: #c40000;
+}
+
+.quiz-marker.correct {
+  color: #0a8a2a;
+}
+
+#showPumpAgainButton,
+#showPumpAgainButton2,
+#showDepolarizationAgainButton,
+#showRepolarizationAgainButton,
+#showHyperpolarizationAgainButton,
+#pumpQuizNextButton,
+#chargeQuizNextButton,
+#sodiumQuizNextButton,
+#depolarizationQuizNextButton,
+#potassiumQuizNextButton,
+#repolarizationQuizNextButton,
+#hyperpolarizationQuizNextButton {
+  margin-top: 10px;
+}
+
+#pumpQuizNextButton,
+#chargeQuizNextButton,
+#sodiumQuizNextButton,
+#depolarizationQuizNextButton,
+#potassiumQuizNextButton,
+#repolarizationQuizNextButton,
+#hyperpolarizationQuizNextButton {
+  display: none;
+  float: right;
+}
+
+#synapticTerminalQuizNextButton {
+  display: none;
+  float: right;
+  margin-top: 10px;
+}
+
+#showNeuronEffectAgainButton,
+#neuronEffectQuizNextButton,
+#negativeIonQuizNextButton {
+  margin-top: 10px;
+}
+
+#neuronEffectQuizNextButton,
+#negativeIonQuizNextButton {
+  display: none;
+  float: right;
+}
+
+#synapsePage.inhibitory .releasedNeurotransmitter,
+#synapsePage.inhibitory .vesicle img,
+#synapsePage.inhibitory #synapseLegend img.legend-neurotransmitter {
+  filter: sepia(1) saturate(7) hue-rotate(235deg);
+}
+
+#synapsePage.inhibitory .synapseNaIon,
+#synapsePage.inhibitory #synapseLegend div:last-child img.legend-ion {
+  filter: sepia(1) saturate(8) hue-rotate(305deg);
 }
 
 button {
@@ -488,26 +742,196 @@ button {
   let synapseVoltage = -70;
   let synapseGraphX = 50;
   let synapseVoltageResponseStarted = false;
+  let synapseQuizToShowAfterAnimation = "neuronEffectQuiz";
+  let synapseMode = "excitatory";
+  let freeExploreMode = false;
 
 function showSynapsePage() {
-  document.querySelector("h2").textContent = "Synapse";
+  synapseMode = "excitatory";
+  document.querySelector("h2").textContent = "Excitatory Postsynaptic Potential";
+  document.getElementById("synapsePage").className = "";
+  document.getElementById("synapseIonLegendLabel").textContent = "Na ion";
   document.getElementById("modelArea").style.display = "none";
   document.getElementById("controls").style.display = "none";
   document.getElementById("graphArea").style.display = "none";
+  document.getElementById("pumpQuiz").style.display = "none";
+  document.getElementById("chargeQuiz").style.display = "none";
+  document.getElementById("sodiumQuiz").style.display = "none";
+  document.getElementById("depolarizationQuiz").style.display = "none";
+  document.getElementById("potassiumQuiz").style.display = "none";
+  document.getElementById("repolarizationQuiz").style.display = "none";
+  document.getElementById("hyperpolarizationQuiz").style.display = "none";
   document.getElementById("synapsePage").style.display = "block";
   createSynapseCaIons();
   createSynapseVesicles();
   createSynapseNaIons();
   resetLigandChannel();
   resetSynapseGraph();
+  if (freeExploreMode) {
+    resetSynapticTerminalQuiz();
+    document.getElementById("synapseGraphArea").style.display = "block";
+    showOnlySynapseButtons(["backToActionPotentialButton", "openCaButton", "showIpspButton", "resetSynapseButton"]);
+  } else {
+    showInitialSynapseQuiz();
+  }
+}
+
+function showInhibitorySynapsePage(showFreeControls = false) {
+  synapseMode = "inhibitory";
+  document.querySelector("h2").textContent = "Inhibitory Postsynaptic Potential";
+  document.getElementById("synapsePage").className = "inhibitory";
+  document.getElementById("synapseIonLegendLabel").textContent = "Cl ion";
+  document.getElementById("modelArea").style.display = "none";
+  document.getElementById("controls").style.display = "none";
+  document.getElementById("graphArea").style.display = "none";
+  resetPumpQuiz();
+  document.getElementById("synapsePage").style.display = "block";
+  resetSynapseAnimationState();
+  document.getElementById("synapseGraphArea").style.display = "block";
+  showOnlySynapseButtons(showFreeControls || freeExploreMode
+    ? ["backToActionPotentialButton", "openCaButton", "showEpspButton", "resetSynapseButton"]
+    : ["openCaButton", "resetSynapseButton"]);
 }
 
 function showActionPotentialPage() {
-  document.querySelector("h2").textContent = "Resting Potential";
+  document.querySelector("h2").textContent = "Action Potential Model";
   document.getElementById("modelArea").style.display = "flex";
   document.getElementById("controls").style.display = "block";
-  document.getElementById("graphArea").style.display = "block";
+  if (freeExploreMode) {
+    resetPumpQuiz();
+    setChargeLabelsVisible(true);
+    setActionGraphVisible(true);
+    showOnlyActionButtons(["pumpButton", "depolarizationButton", "repolarizationButton", "resetButton", "synapseButton"]);
+  } else {
+    setActionGraphVisible(chargeLabelsVisible);
+  }
   document.getElementById("synapsePage").style.display = "none";
+}
+
+function showOnlySynapseButtons(buttonIds) {
+  ["backToActionPotentialButton", "openCaButton", "showEpspButton", "showIpspButton", "resetSynapseButton"].forEach((buttonId) => {
+    document.getElementById(buttonId).style.display = buttonIds.includes(buttonId) ? "inline-block" : "none";
+  });
+}
+
+function resetSynapticTerminalQuiz() {
+  document.getElementById("synapticTerminalQuiz").style.display = "none";
+  document.getElementById("neuronEffectQuiz").style.display = "none";
+  document.getElementById("negativeIonQuiz").style.display = "none";
+  document.getElementById("synapticTerminalQuizNextButton").style.display = "none";
+  document.getElementById("neuronEffectQuizNextButton").style.display = "none";
+  document.getElementById("negativeIonQuizNextButton").style.display = "none";
+  document.getElementById("synapticTerminalQuizMarkerCa").textContent = "";
+  document.getElementById("synapticTerminalQuizMarkerNa").textContent = "";
+  document.getElementById("neuronEffectQuizMarkerLikely").textContent = "";
+  document.getElementById("neuronEffectQuizMarkerLarger").textContent = "";
+  document.getElementById("neuronEffectQuizMarkerLess").textContent = "";
+  document.getElementById("negativeIonQuizMarkerThreshold").textContent = "";
+  document.getElementById("negativeIonQuizMarkerNegative").textContent = "";
+  document.getElementById("negativeIonQuizMarkerCannot").textContent = "";
+  document.getElementById("synapticTerminalQuizMarkerCa").className = "quiz-marker";
+  document.getElementById("synapticTerminalQuizMarkerNa").className = "quiz-marker";
+  document.getElementById("neuronEffectQuizMarkerLikely").className = "quiz-marker";
+  document.getElementById("neuronEffectQuizMarkerLarger").className = "quiz-marker";
+  document.getElementById("neuronEffectQuizMarkerLess").className = "quiz-marker";
+  document.getElementById("negativeIonQuizMarkerThreshold").className = "quiz-marker";
+  document.getElementById("negativeIonQuizMarkerNegative").className = "quiz-marker";
+  document.getElementById("negativeIonQuizMarkerCannot").className = "quiz-marker";
+}
+
+function showSynapseQuiz(quizId) {
+  document.getElementById("synapticTerminalQuiz").style.display = quizId === "synapticTerminalQuiz" ? "block" : "none";
+  document.getElementById("neuronEffectQuiz").style.display = quizId === "neuronEffectQuiz" ? "block" : "none";
+  document.getElementById("negativeIonQuiz").style.display = quizId === "negativeIonQuiz" ? "block" : "none";
+  showOnlySynapseButtons(["resetSynapseButton"]);
+}
+
+function showInitialSynapseQuiz() {
+  resetSynapticTerminalQuiz();
+  document.getElementById("synapseGraphArea").style.display = "none";
+  showSynapseQuiz("synapticTerminalQuiz");
+}
+
+function answerSynapticTerminalQuiz() {
+  let caMarker = document.getElementById("synapticTerminalQuizMarkerCa");
+  let naMarker = document.getElementById("synapticTerminalQuizMarkerNa");
+
+  caMarker.textContent = "✓";
+  naMarker.textContent = "✕";
+  caMarker.className = "quiz-marker correct";
+  naMarker.className = "quiz-marker incorrect";
+  document.getElementById("synapticTerminalQuizNextButton").style.display = "inline-block";
+}
+
+function completeSynapticTerminalQuiz() {
+  document.getElementById("synapticTerminalQuiz").style.display = "none";
+  document.getElementById("synapseGraphArea").style.display = "none";
+  showOnlySynapseButtons(["openCaButton", "resetSynapseButton"]);
+}
+
+function resetSynapseAnimationState() {
+  activeTimers.forEach((timer) => clearTimeout(timer));
+  activeTimers = [];
+  caAnimationRunning = false;
+  vesicleAnimationRunning = false;
+  synapseNaAnimationRunning = false;
+
+  document.getElementById("caTop").src = "ca_closed.png";
+  document.getElementById("caBottom").src = "ca_closed.png";
+  document.getElementById("openCaButton").disabled = false;
+
+  createSynapseCaIons();
+  createSynapseVesicles();
+  createSynapseNaIons();
+  resetLigandChannel();
+  resetSynapseGraph();
+  resetSynapticTerminalQuiz();
+  document.getElementById("synapseGraphArea").style.display = "none";
+}
+
+function answerNeuronEffectQuiz() {
+  let likelyMarker = document.getElementById("neuronEffectQuizMarkerLikely");
+  let largerMarker = document.getElementById("neuronEffectQuizMarkerLarger");
+  let lessMarker = document.getElementById("neuronEffectQuizMarkerLess");
+
+  likelyMarker.textContent = "✓";
+  largerMarker.textContent = "✕";
+  lessMarker.textContent = "✕";
+  likelyMarker.className = "quiz-marker correct";
+  largerMarker.className = "quiz-marker incorrect";
+  lessMarker.className = "quiz-marker incorrect";
+  document.getElementById("neuronEffectQuizNextButton").style.display = "inline-block";
+}
+
+function completeNeuronEffectQuiz() {
+  document.getElementById("synapseGraphArea").style.display = "block";
+  document.getElementById("neuronEffectQuiz").style.display = "none";
+  showSynapseQuiz("negativeIonQuiz");
+}
+
+function answerNegativeIonQuiz() {
+  let thresholdMarker = document.getElementById("negativeIonQuizMarkerThreshold");
+  let negativeMarker = document.getElementById("negativeIonQuizMarkerNegative");
+  let cannotMarker = document.getElementById("negativeIonQuizMarkerCannot");
+
+  thresholdMarker.textContent = "✕";
+  negativeMarker.textContent = "✓";
+  cannotMarker.textContent = "✕";
+  thresholdMarker.className = "quiz-marker incorrect";
+  negativeMarker.className = "quiz-marker correct";
+  cannotMarker.className = "quiz-marker incorrect";
+  document.getElementById("negativeIonQuizNextButton").style.display = "inline-block";
+}
+
+function completeNegativeIonQuiz() {
+  document.getElementById("negativeIonQuiz").style.display = "none";
+  showInhibitorySynapsePage();
+}
+
+function replayOpenCaChannelsAnimation() {
+  resetSynapseAnimationState();
+  showOnlySynapseButtons(["resetSynapseButton"]);
+  openCaChannels("neuronEffectQuiz");
 }
 
 function scheduleTimeout(callback, delay) {
@@ -728,7 +1152,7 @@ function startSynapseVoltageResponse() {
   }
 
   synapseVoltageResponseStarted = true;
-  plotSynapseVoltage(-58);
+  plotSynapseVoltage(synapseMode === "inhibitory" ? -82 : -58);
 
   scheduleTimeout(() => {
     plotSynapseVoltage(-70);
@@ -814,6 +1238,20 @@ function moveSynapseNaIons() {
           if (finishedCount === naIons.length) {
             synapseNaAnimationRunning = false;
             document.getElementById("openCaButton").disabled = false;
+            if (synapseQuizToShowAfterAnimation) {
+              document.getElementById("synapseGraphArea").style.display = "none";
+              showSynapseQuiz(synapseQuizToShowAfterAnimation);
+            } else {
+              document.getElementById("synapseGraphArea").style.display = "block";
+              if (synapseMode === "inhibitory") {
+                freeExploreMode = true;
+                showOnlySynapseButtons(["backToActionPotentialButton", "openCaButton", "showEpspButton", "resetSynapseButton"]);
+              } else if (freeExploreMode) {
+                showOnlySynapseButtons(["backToActionPotentialButton", "openCaButton", "showIpspButton", "resetSynapseButton"]);
+              } else {
+                showOnlySynapseButtons(["openCaButton", "resetSynapseButton"]);
+              }
+            }
           }
         });
       });
@@ -837,6 +1275,18 @@ function resetSynapse() {
   createSynapseNaIons();
   resetLigandChannel();
   resetSynapseGraph();
+  if (synapseMode === "inhibitory") {
+    document.querySelector("h2").textContent = "Inhibitory Postsynaptic Potential";
+    document.getElementById("synapsePage").className = "inhibitory";
+    document.getElementById("synapseIonLegendLabel").textContent = "Cl ion";
+    resetSynapticTerminalQuiz();
+    document.getElementById("synapseGraphArea").style.display = "block";
+    showOnlySynapseButtons(freeExploreMode
+      ? ["backToActionPotentialButton", "openCaButton", "showEpspButton", "resetSynapseButton"]
+      : ["openCaButton", "resetSynapseButton"]);
+  } else {
+    showInitialSynapseQuiz();
+  }
 }
 
 function createSynapseVesicle(x, y, releaseY) {
@@ -1008,6 +1458,318 @@ let graphX = 50;
 let voltage = -70;
 let graphReady = false;
 let graphStarted = false;
+let chargeLabelsVisible = false;
+let pumpAnimationRunning = false;
+let depolarizationAnimationRunning = false;
+let repolarizationAnimationRunning = false;
+let quizToShowAfterReplay = "";
+let preDepolarizationSnapshot = null;
+let preRepolarizationSnapshot = null;
+
+function setChargeLabelsVisible(isVisible) {
+  chargeLabelsVisible = isVisible;
+
+  if (isVisible) {
+    updateChargeLabels(voltage);
+  } else {
+    document.getElementById("outside").textContent = "Outside";
+    document.getElementById("inside").textContent = "Inside";
+  }
+}
+
+function setActionGraphVisible(isVisible) {
+  document.getElementById("graphArea").style.display = isVisible ? "block" : "none";
+}
+
+function showOnlyActionButtons(buttonIds) {
+  ["pumpButton", "depolarizationButton", "repolarizationButton", "resetButton", "synapseButton"].forEach((buttonId) => {
+    document.getElementById(buttonId).style.display = buttonIds.includes(buttonId) ? "inline-block" : "none";
+  });
+}
+
+function snapshotActionState() {
+  return {
+    ions: Array.from(document.querySelectorAll(".ion")).map((ion) => ({
+      type: ion.dataset.ionType,
+      location: ion.dataset.location,
+      x: parseFloat(ion.style.left),
+      y: parseFloat(ion.style.top)
+    })),
+    voltage: voltage,
+    graphX: graphX,
+    graphStarted: graphStarted,
+    graphReady: graphReady,
+    canvasWidth: canvas.width,
+    graphImage: ctx.getImageData(0, 0, canvas.width, canvas.height),
+    animationRun: animationRun
+  };
+}
+
+function restoreActionState(snapshot) {
+  activeTimers.forEach((timer) => clearTimeout(timer));
+  activeTimers = [];
+  document.querySelectorAll(".ion").forEach((ion) => ion.remove());
+
+  snapshot.ions.forEach((ionState) => {
+    createInitialIon(ionState.type, ionState.x, ionState.y, ionState.location);
+  });
+
+  document.getElementById("pump").src = "pump_inside.png";
+  document.getElementById("naChannel").src = "na_closed.png";
+  document.getElementById("kChannel").src = "k_closed.png";
+
+  graphX = snapshot.graphX;
+  voltage = snapshot.voltage;
+  graphStarted = snapshot.graphStarted;
+  graphReady = snapshot.graphReady;
+  animationRun = snapshot.animationRun;
+  canvas.width = snapshot.canvasWidth;
+  ctx.putImageData(snapshot.graphImage, 0, 0);
+  voltageReadout.textContent = "Voltage: " + voltage + " mV";
+  updateChargeLabels(voltage);
+}
+
+function resetPumpQuiz() {
+  document.getElementById("pumpQuiz").style.display = "none";
+  document.getElementById("chargeQuiz").style.display = "none";
+  document.getElementById("sodiumQuiz").style.display = "none";
+  document.getElementById("depolarizationQuiz").style.display = "none";
+  document.getElementById("potassiumQuiz").style.display = "none";
+  document.getElementById("repolarizationQuiz").style.display = "none";
+  document.getElementById("pumpQuizNextButton").style.display = "none";
+  document.getElementById("chargeQuizNextButton").style.display = "none";
+  document.getElementById("sodiumQuizNextButton").style.display = "none";
+  document.getElementById("depolarizationQuizNextButton").style.display = "none";
+  document.getElementById("potassiumQuizNextButton").style.display = "none";
+  document.getElementById("repolarizationQuizNextButton").style.display = "none";
+  document.getElementById("hyperpolarizationQuizNextButton").style.display = "none";
+  document.getElementById("pumpQuizMarkerNo").textContent = "";
+  document.getElementById("pumpQuizMarkerYes").textContent = "";
+  document.getElementById("chargeQuizMarkerNoEffect").textContent = "";
+  document.getElementById("chargeQuizMarkerPositiveInside").textContent = "";
+  document.getElementById("chargeQuizMarkerNegativeInside").textContent = "";
+  document.getElementById("sodiumQuizMarkerIntoCell").textContent = "";
+  document.getElementById("sodiumQuizMarkerOutCell").textContent = "";
+  document.getElementById("depolarizationQuizMarkerNoChange").textContent = "";
+  document.getElementById("depolarizationQuizMarkerPositive").textContent = "";
+  document.getElementById("depolarizationQuizMarkerNegative").textContent = "";
+  document.getElementById("potassiumQuizMarkerOpen").textContent = "";
+  document.getElementById("potassiumQuizMarkerLigand").textContent = "";
+  document.getElementById("repolarizationQuizMarkerPositive").textContent = "";
+  document.getElementById("repolarizationQuizMarkerNegative").textContent = "";
+  document.getElementById("repolarizationQuizMarkerSame").textContent = "";
+  document.getElementById("hyperpolarizationQuizMarkerNa").textContent = "";
+  document.getElementById("hyperpolarizationQuizMarkerK").textContent = "";
+  document.getElementById("pumpQuizMarkerNo").className = "quiz-marker";
+  document.getElementById("pumpQuizMarkerYes").className = "quiz-marker";
+  document.getElementById("chargeQuizMarkerNoEffect").className = "quiz-marker";
+  document.getElementById("chargeQuizMarkerPositiveInside").className = "quiz-marker";
+  document.getElementById("chargeQuizMarkerNegativeInside").className = "quiz-marker";
+  document.getElementById("sodiumQuizMarkerIntoCell").className = "quiz-marker";
+  document.getElementById("sodiumQuizMarkerOutCell").className = "quiz-marker";
+  document.getElementById("depolarizationQuizMarkerNoChange").className = "quiz-marker";
+  document.getElementById("depolarizationQuizMarkerPositive").className = "quiz-marker";
+  document.getElementById("depolarizationQuizMarkerNegative").className = "quiz-marker";
+  document.getElementById("potassiumQuizMarkerOpen").className = "quiz-marker";
+  document.getElementById("potassiumQuizMarkerLigand").className = "quiz-marker";
+  document.getElementById("repolarizationQuizMarkerPositive").className = "quiz-marker";
+  document.getElementById("repolarizationQuizMarkerNegative").className = "quiz-marker";
+  document.getElementById("repolarizationQuizMarkerSame").className = "quiz-marker";
+  document.getElementById("hyperpolarizationQuizMarkerNa").className = "quiz-marker";
+  document.getElementById("hyperpolarizationQuizMarkerK").className = "quiz-marker";
+}
+
+function showQuiz(quizId) {
+  document.getElementById("pumpQuiz").style.display = quizId === "pumpQuiz" ? "block" : "none";
+  document.getElementById("chargeQuiz").style.display = quizId === "chargeQuiz" ? "block" : "none";
+  document.getElementById("sodiumQuiz").style.display = quizId === "sodiumQuiz" ? "block" : "none";
+  document.getElementById("depolarizationQuiz").style.display = quizId === "depolarizationQuiz" ? "block" : "none";
+  document.getElementById("potassiumQuiz").style.display = quizId === "potassiumQuiz" ? "block" : "none";
+  document.getElementById("repolarizationQuiz").style.display = quizId === "repolarizationQuiz" ? "block" : "none";
+  document.getElementById("hyperpolarizationQuiz").style.display = quizId === "hyperpolarizationQuiz" ? "block" : "none";
+  showOnlyActionButtons(["resetButton"]);
+}
+
+function showPumpQuiz() {
+  showQuiz(quizToShowAfterReplay || "pumpQuiz");
+  quizToShowAfterReplay = "";
+}
+
+function answerPumpQuiz() {
+  let noMarker = document.getElementById("pumpQuizMarkerNo");
+  let yesMarker = document.getElementById("pumpQuizMarkerYes");
+
+  noMarker.textContent = "✕";
+  yesMarker.textContent = "✓";
+  noMarker.className = "quiz-marker incorrect";
+  yesMarker.className = "quiz-marker correct";
+  document.getElementById("pumpQuizNextButton").style.display = "inline-block";
+}
+
+function completePumpQuiz() {
+  document.getElementById("pumpQuiz").style.display = "none";
+  showQuiz("chargeQuiz");
+}
+
+function answerChargeQuiz() {
+  let noEffectMarker = document.getElementById("chargeQuizMarkerNoEffect");
+  let positiveInsideMarker = document.getElementById("chargeQuizMarkerPositiveInside");
+  let negativeInsideMarker = document.getElementById("chargeQuizMarkerNegativeInside");
+
+  noEffectMarker.textContent = "✕";
+  positiveInsideMarker.textContent = "✕";
+  negativeInsideMarker.textContent = "✓";
+  noEffectMarker.className = "quiz-marker incorrect";
+  positiveInsideMarker.className = "quiz-marker incorrect";
+  negativeInsideMarker.className = "quiz-marker correct";
+  document.getElementById("chargeQuizNextButton").style.display = "inline-block";
+}
+
+function completeChargeQuiz() {
+  setChargeLabelsVisible(true);
+  setActionGraphVisible(true);
+  document.getElementById("chargeQuiz").style.display = "none";
+  showQuiz("sodiumQuiz");
+}
+
+function answerSodiumQuiz() {
+  let intoCellMarker = document.getElementById("sodiumQuizMarkerIntoCell");
+  let outCellMarker = document.getElementById("sodiumQuizMarkerOutCell");
+
+  intoCellMarker.textContent = "✓";
+  outCellMarker.textContent = "✕";
+  intoCellMarker.className = "quiz-marker correct";
+  outCellMarker.className = "quiz-marker incorrect";
+  document.getElementById("sodiumQuizNextButton").style.display = "inline-block";
+}
+
+function completeSodiumQuiz() {
+  setChargeLabelsVisible(true);
+  setActionGraphVisible(true);
+  showOnlyActionButtons(["depolarizationButton", "resetButton"]);
+  document.getElementById("sodiumQuiz").style.display = "none";
+}
+
+function answerDepolarizationQuiz() {
+  let noChangeMarker = document.getElementById("depolarizationQuizMarkerNoChange");
+  let positiveMarker = document.getElementById("depolarizationQuizMarkerPositive");
+  let negativeMarker = document.getElementById("depolarizationQuizMarkerNegative");
+
+  noChangeMarker.textContent = "✕";
+  positiveMarker.textContent = "✓";
+  negativeMarker.textContent = "✕";
+  noChangeMarker.className = "quiz-marker incorrect";
+  positiveMarker.className = "quiz-marker correct";
+  negativeMarker.className = "quiz-marker incorrect";
+  document.getElementById("depolarizationQuizNextButton").style.display = "inline-block";
+}
+
+function completeDepolarizationQuiz() {
+  setChargeLabelsVisible(true);
+  setActionGraphVisible(true);
+  document.getElementById("depolarizationQuiz").style.display = "none";
+  showQuiz("potassiumQuiz");
+}
+
+function answerPotassiumQuiz() {
+  let openMarker = document.getElementById("potassiumQuizMarkerOpen");
+  let ligandMarker = document.getElementById("potassiumQuizMarkerLigand");
+
+  openMarker.textContent = "✓";
+  ligandMarker.textContent = "✕";
+  openMarker.className = "quiz-marker correct";
+  ligandMarker.className = "quiz-marker incorrect";
+  document.getElementById("potassiumQuizNextButton").style.display = "inline-block";
+}
+
+function completePotassiumQuiz() {
+  setChargeLabelsVisible(false);
+  setActionGraphVisible(false);
+  showOnlyActionButtons(["repolarizationButton", "resetButton"]);
+  document.getElementById("potassiumQuiz").style.display = "none";
+}
+
+function answerRepolarizationQuiz() {
+  let positiveMarker = document.getElementById("repolarizationQuizMarkerPositive");
+  let negativeMarker = document.getElementById("repolarizationQuizMarkerNegative");
+  let sameMarker = document.getElementById("repolarizationQuizMarkerSame");
+
+  positiveMarker.textContent = "✕";
+  negativeMarker.textContent = "✓";
+  sameMarker.textContent = "✕";
+  positiveMarker.className = "quiz-marker incorrect";
+  negativeMarker.className = "quiz-marker correct";
+  sameMarker.className = "quiz-marker incorrect";
+  document.getElementById("repolarizationQuizNextButton").style.display = "inline-block";
+}
+
+function completeRepolarizationQuiz() {
+  setChargeLabelsVisible(true);
+  setActionGraphVisible(true);
+  document.getElementById("repolarizationQuiz").style.display = "none";
+  showQuiz("hyperpolarizationQuiz");
+}
+
+function answerHyperpolarizationQuiz() {
+  let naMarker = document.getElementById("hyperpolarizationQuizMarkerNa");
+  let kMarker = document.getElementById("hyperpolarizationQuizMarkerK");
+
+  naMarker.textContent = "✕";
+  kMarker.textContent = "✓";
+  naMarker.className = "quiz-marker incorrect";
+  kMarker.className = "quiz-marker correct";
+  document.getElementById("hyperpolarizationQuizNextButton").style.display = "inline-block";
+}
+
+function completeHyperpolarizationQuiz() {
+  document.getElementById("hyperpolarizationQuiz").style.display = "none";
+  showOnlyActionButtons(["synapseButton", "resetButton"]);
+}
+
+function replayPumpAnimation(quizId) {
+  quizToShowAfterReplay = quizId;
+  resetModel();
+  startAnimation();
+}
+
+function replayDepolarizationAnimation() {
+  if (!preDepolarizationSnapshot) {
+    return;
+  }
+
+  resetPumpQuiz();
+  restoreActionState(preDepolarizationSnapshot);
+  setChargeLabelsVisible(false);
+  setActionGraphVisible(false);
+  showOnlyActionButtons(["resetButton"]);
+  startDepolarization(true);
+}
+
+function replayRepolarizationAnimation() {
+  if (!preRepolarizationSnapshot) {
+    return;
+  }
+
+  resetPumpQuiz();
+  restoreActionState(preRepolarizationSnapshot);
+  setChargeLabelsVisible(false);
+  setActionGraphVisible(false);
+  showOnlyActionButtons(["resetButton"]);
+  startRepolarization(true);
+}
+
+function replayHyperpolarizationAnimation() {
+  if (!preRepolarizationSnapshot) {
+    return;
+  }
+
+  resetPumpQuiz();
+  restoreActionState(preRepolarizationSnapshot);
+  setChargeLabelsVisible(true);
+  setActionGraphVisible(true);
+  showOnlyActionButtons(["resetButton"]);
+  startRepolarization(true, true, "hyperpolarizationQuiz");
+}
 
 function drawAxes() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1098,7 +1860,9 @@ function plotVoltage(newVoltage) {
 
   voltage = newVoltage;
   voltageReadout.textContent = "Voltage: " + voltage + " mV";
-  updateChargeLabels(voltage);
+  if (chargeLabelsVisible) {
+    updateChargeLabels(voltage);
+  }
   graphStarted = true;
   document.getElementById("graphWrap").scrollLeft = canvas.width;
 }
@@ -1112,7 +1876,9 @@ function prepareGraph(startVoltage) {
 
   voltage = startVoltage;
   voltageReadout.textContent = "Voltage: " + voltage + " mV";
-  updateChargeLabels(voltage);
+  if (chargeLabelsVisible) {
+    updateChargeLabels(voltage);
+  }
 }
 
 function updateChargeLabels(currentVoltage) {
@@ -1135,10 +1901,15 @@ function updateChargeLabels(currentVoltage) {
 }
 
 function startAnimation() {
+  if (pumpAnimationRunning) {
+    return;
+  }
 
   let runNumber = animationRun;
   animationRun++;
 
+  pumpAnimationRunning = true;
+  resetPumpQuiz();
   prepareGraph(voltage);
   
   let pump = document.getElementById("pump");
@@ -1149,6 +1920,7 @@ let naEnd3 = offsetPosition(310, outsideY, 3, runNumber);
 let selectedNa = selectIons("na", "inside", 3);
 
 if (selectedNa.length < 3) {
+  pumpAnimationRunning = false;
   return;
 }
 
@@ -1190,6 +1962,7 @@ let na3 = selectedNa[2];
     let selectedK = selectIons("k", "outside", 2);
 
     if (selectedK.length < 2) {
+      pumpAnimationRunning = false;
       return;
     }
 
@@ -1215,6 +1988,8 @@ let na3 = selectedNa[2];
       scheduleTimeout(() => {
         k1.dataset.location = "inside";
         k2.dataset.location = "inside";
+        pumpAnimationRunning = false;
+        showPumpQuiz();
       }, 800);
 
     }, 900);
@@ -1223,7 +1998,11 @@ let na3 = selectedNa[2];
 
 }
 
-function startDepolarization() {
+function startDepolarization(isReplay = false) {
+  if (depolarizationAnimationRunning) {
+    return;
+  }
+
   let runNumber = animationRun;
   animationRun++;
   let outsideNaIons = selectIonsToBalance("na", "outside", "inside");
@@ -1232,6 +2011,14 @@ function startDepolarization() {
     return;
   }
 
+  depolarizationAnimationRunning = true;
+  resetPumpQuiz();
+  showOnlyActionButtons(["resetButton"]);
+  setChargeLabelsVisible(false);
+  setActionGraphVisible(false);
+  if (!isReplay) {
+    preDepolarizationSnapshot = snapshotActionState();
+  }
   prepareGraph(voltage);
 
   let naChannel = document.getElementById("naChannel");
@@ -1262,10 +2049,18 @@ function startDepolarization() {
 
   scheduleTimeout(() => {
     naChannel.src = "na_closed.png";
+    depolarizationAnimationRunning = false;
+    setChargeLabelsVisible(false);
+    setActionGraphVisible(false);
+    showQuiz("depolarizationQuiz");
   }, 1800);
 }
 
-function startRepolarization() {
+function startRepolarization(isReplay = false, showGraphDuringAnimation = false, finalQuizId = "repolarizationQuiz") {
+  if (repolarizationAnimationRunning) {
+    return;
+  }
+
   let runNumber = animationRun;
   animationRun++;
   let insideKIons = selectIonsToBalance("k", "inside", "outside");
@@ -1274,6 +2069,14 @@ function startRepolarization() {
     return;
   }
 
+  repolarizationAnimationRunning = true;
+  resetPumpQuiz();
+  showOnlyActionButtons(["resetButton"]);
+  setChargeLabelsVisible(showGraphDuringAnimation);
+  setActionGraphVisible(showGraphDuringAnimation);
+  if (!isReplay) {
+    preRepolarizationSnapshot = snapshotActionState();
+  }
   prepareGraph(voltage);
 
   let kChannel = document.getElementById("kChannel");
@@ -1305,6 +2108,10 @@ function startRepolarization() {
 
   scheduleTimeout(() => {
     kChannel.src = "k_closed.png";
+    repolarizationAnimationRunning = false;
+    setChargeLabelsVisible(showGraphDuringAnimation);
+    setActionGraphVisible(showGraphDuringAnimation);
+    showQuiz(finalQuizId);
   }, 1800);
 }
 
@@ -1312,6 +2119,11 @@ function resetModel() {
   activeTimers.forEach((timer) => clearTimeout(timer));
   activeTimers = [];
   animationRun = 0;
+  pumpAnimationRunning = false;
+  depolarizationAnimationRunning = false;
+  repolarizationAnimationRunning = false;
+  preDepolarizationSnapshot = null;
+  preRepolarizationSnapshot = null;
 
   document.querySelectorAll(".ion").forEach((ion) => ion.remove());
 
@@ -1325,16 +2137,27 @@ function resetModel() {
   graphStarted = false;
   canvas.width = 700;
   voltageReadout.textContent = "Voltage: -70 mV";
-  updateChargeLabels(voltage);
+  setChargeLabelsVisible(false);
+  setActionGraphVisible(false);
+  showOnlyActionButtons(["pumpButton", "resetButton"]);
+  resetPumpQuiz();
   drawAxes();
   plotVoltage(-70);
 }
 
-function openCaChannels() {
+function openCaChannels(finalQuizId) {
   if (caAnimationRunning) {
     return;
   }
 
+  if (finalQuizId === undefined) {
+    finalQuizId = freeExploreMode || synapseMode === "inhibitory" ? "" : "neuronEffectQuiz";
+  }
+
+  synapseQuizToShowAfterAnimation = finalQuizId;
+  resetSynapticTerminalQuiz();
+  document.getElementById("synapseGraphArea").style.display = freeExploreMode || synapseMode === "inhibitory" ? "block" : "none";
+  showOnlySynapseButtons(["resetSynapseButton"]);
   createSynapseCaIons();
   createSynapseVesicles();
   createSynapseNaIons();
@@ -1385,6 +2208,9 @@ resetLigandChannel();
 resetSynapseGraph();
 drawAxes();
 plotVoltage(-70);
+setChargeLabelsVisible(false);
+setActionGraphVisible(false);
+showOnlyActionButtons(["pumpButton", "resetButton"]);
 </script>
 </body>
 </html>
