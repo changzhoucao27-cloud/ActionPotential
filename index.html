@@ -85,11 +85,11 @@
 </div>
 
 <div id="legend">
-  <div><img src="na_ion.png" class="legend-ion" alt=""><span class="legend-ion-label">Na ion</span></div>
-  <div><img src="k_ion.png" class="legend-ion" alt=""><span class="legend-ion-label">K ion</span></div>
-  <div><img src="na_closed.png" alt="">Na channel</div>
-  <div><img src="k_closed.png" alt="">K channel</div>
-  <div><img src="pump_inside.png" alt="">Na/K pump</div>
+  <div><img src="na_ion.png" class="legend-ion" alt=""><span class="legend-ion-label">Na&#8314; ion</span></div>
+  <div><img src="k_ion.png" class="legend-ion" alt=""><span class="legend-ion-label">K&#8314; ion</span></div>
+  <div><img src="na_closed.png" alt="">Na&#8314; channel</div>
+  <div><img src="k_closed.png" alt="">K&#8314; channel</div>
+  <div><img src="pump_inside.png" alt="">Na&#8314;/K&#8314; pump</div>
 </div>
 </div>
 
@@ -121,6 +121,10 @@
     <span class="quiz-marker" id="chargeQuizMarkerNegativeInside"></span>
     <span>The inside becomes more negative while the outside becomes more positive.</span>
   </button>
+  <p class="quiz-explanation" id="chargeQuizExplanation">
+    <strong>Explanation:</strong>
+    The sodium-potassium pump transports 3 Na<sup>+</sup> ions out of the cell and 2 K<sup>+</sup> ions into the cell, resulting in a net loss of positive charge from the inside of the neuron.
+  </p>
   <button id="showPumpAgainButton2" onclick="replayPumpAnimation('chargeQuiz')">Show me again</button>
   <button id="chargeQuizNextButton" onclick="completeChargeQuiz()">Next</button>
 </div>
@@ -152,6 +156,10 @@
     <span class="quiz-marker" id="depolarizationQuizMarkerNegative"></span>
     <span>The membrane potential becomes more negative.</span>
   </button>
+  <p class="quiz-explanation" id="depolarizationQuizExplanation">
+    <strong>Explanation:</strong>
+    The influx of Na<sup>+</sup> causes depolarization, making the inside of the neuron less negative.
+  </p>
   <button id="showDepolarizationAgainButton" onclick="replayDepolarizationAnimation()">Show me again</button>
   <button id="depolarizationQuizNextButton" onclick="completeDepolarizationQuiz()">Next</button>
 </div>
@@ -183,6 +191,10 @@
     <span class="quiz-marker" id="repolarizationQuizMarkerSame"></span>
     <span>The membrane potential stays the same.</span>
   </button>
+  <p class="quiz-explanation" id="repolarizationQuizExplanation">
+    <strong>Explanation:</strong>
+    The movement of K<sup>+</sup> out of the cell causes repolarization.
+  </p>
   <button id="showRepolarizationAgainButton" onclick="replayRepolarizationAnimation()">Show me again</button>
   <button id="repolarizationQuizNextButton" onclick="completeRepolarizationQuiz()">Next</button>
 </div>
@@ -197,6 +209,10 @@
     <span class="quiz-marker" id="hyperpolarizationQuizMarkerK"></span>
     <span>K<sup>+</sup> channels close slowly, allowing extra K<sup>+</sup> ions to leave the cell.</span>
   </button>
+  <p class="quiz-explanation" id="hyperpolarizationQuizExplanation">
+    <strong>Explanation:</strong>
+    Because K<sup>+</sup> channels close slowly, the membrane potential temporarily becomes more negative than the resting potential.
+  </p>
   <button id="showHyperpolarizationAgainButton" onclick="replayHyperpolarizationAnimation()">Show me again</button>
   <button id="hyperpolarizationQuizNextButton" onclick="completeHyperpolarizationQuiz()">Next</button>
 </div>
@@ -232,12 +248,12 @@
     </div>
 
     <div id="synapseLegend">
-      <div><span class="synapse-legend-icon"><img src="ca_ion.png" class="legend-ion" alt=""></span><span class="synapse-legend-label">Ca ion</span></div>
-      <div><span class="synapse-legend-icon"><img src="ca_closed.png" class="legend-ca-channel" alt=""></span><span class="synapse-legend-label">Ca channel</span></div>
+      <div><span class="synapse-legend-icon"><img src="ca_ion.png" class="legend-ion" alt=""></span><span class="synapse-legend-label">Ca<sup>2+</sup> ion</span></div>
+      <div><span class="synapse-legend-icon"><img src="ca_closed.png" class="legend-ca-channel" alt=""></span><span class="synapse-legend-label">Ca<sup>2+</sup> channel</span></div>
       <div><span class="synapse-legend-icon"><span class="legend-vesicle"></span></span><span class="synapse-legend-label">Vesicle</span></div>
       <div><span class="synapse-legend-icon"><img src="neurotransmitter.png" class="legend-neurotransmitter" alt=""></span><span class="synapse-legend-label">Neurotransmitter</span></div>
       <div><span class="synapse-legend-icon"><img src="ligand_closed.png" class="legend-ligand-channel" alt=""></span><span class="synapse-legend-label">Ligand channel</span></div>
-      <div><span class="synapse-legend-icon"><img src="na_ion.png" class="legend-ion" alt=""></span><span class="synapse-legend-label" id="synapseIonLegendLabel">Na ion</span></div>
+      <div><span class="synapse-legend-icon"><img src="na_ion.png" class="legend-ion" alt=""></span><span class="synapse-legend-label" id="synapseIonLegendLabel">Na<sup>+</sup> ion</span></div>
     </div>
   </div>
 
@@ -268,6 +284,11 @@
       <span class="quiz-marker" id="neuronEffectQuizMarkerLess"></span>
       <span>Na<sup>+</sup> influx makes the next neuron less likely to generate an action potential.</span>
     </button>
+    <p class="quiz-explanation" id="neuronEffectQuizExplanation">
+      <strong>Explanation:</strong>
+      This produces an excitatory postsynaptic potential (EPSP), bringing the membrane potential closer to threshold.
+      Although Na<sup>+</sup> influx makes the neuron more likely to fire an action potential, it does not make the action potential itself larger. Action potentials follow the all-or-nothing principle, meaning that once the membrane reaches threshold, the action potential will occur.
+    </p>
     <button id="showNeuronEffectAgainButton" onclick="replayOpenCaChannelsAnimation()">Show me again</button>
     <button id="neuronEffectQuizNextButton" onclick="completeNeuronEffectQuiz()">Next</button>
   </div>
@@ -286,6 +307,10 @@
       <span class="quiz-marker" id="negativeIonQuizMarkerCannot"></span>
       <span>The ion cannot enter because only Na<sup>+</sup> and K<sup>+</sup> concentration gradients are maintained by active transport.</span>
     </button>
+    <p class="quiz-explanation" id="negativeIonQuizExplanation">
+      <strong>Explanation:</strong>
+      This produces an inhibitory postsynaptic potential (IPSP), moving the membrane potential farther from threshold.
+    </p>
     <button id="negativeIonQuizNextButton" onclick="completeNegativeIonQuiz()">Next</button>
   </div>
 
@@ -385,6 +410,12 @@
   color: #0a8a2a;
 }
 
+.quiz-explanation {
+  display: none;
+  margin: 12px 0 8px;
+  line-height: 1.4;
+}
+
 #showPumpAgainButton,
 #showPumpAgainButton2,
 #showDepolarizationAgainButton,
@@ -478,7 +509,7 @@ button {
 
 #legend {
   width: 210px;
-  height: 420px;
+  min-height: 420px;
   box-sizing: border-box;
   border: 2px solid black;
   padding: 12px;
@@ -509,6 +540,12 @@ button {
   height: 115px;
   flex-basis: 112px;
   margin-left: -78px;
+}
+
+#legend sup {
+  font-size: 70%;
+  line-height: 0;
+  vertical-align: super;
 }
 
 .legend-ion-label {
@@ -750,12 +787,13 @@ function showSynapsePage() {
   synapseMode = "excitatory";
   document.querySelector("h2").textContent = "Excitatory Postsynaptic Potential";
   document.getElementById("synapsePage").className = "";
-  document.getElementById("synapseIonLegendLabel").textContent = "Na ion";
+  document.getElementById("synapseIonLegendLabel").innerHTML = "Na<sup>+</sup> ion";
   document.getElementById("modelArea").style.display = "none";
   document.getElementById("controls").style.display = "none";
   document.getElementById("graphArea").style.display = "none";
   document.getElementById("pumpQuiz").style.display = "none";
   document.getElementById("chargeQuiz").style.display = "none";
+  document.getElementById("chargeQuizExplanation").style.display = "none";
   document.getElementById("sodiumQuiz").style.display = "none";
   document.getElementById("depolarizationQuiz").style.display = "none";
   document.getElementById("potassiumQuiz").style.display = "none";
@@ -780,7 +818,7 @@ function showInhibitorySynapsePage(showFreeControls = false) {
   synapseMode = "inhibitory";
   document.querySelector("h2").textContent = "Inhibitory Postsynaptic Potential";
   document.getElementById("synapsePage").className = "inhibitory";
-  document.getElementById("synapseIonLegendLabel").textContent = "Cl ion";
+  document.getElementById("synapseIonLegendLabel").innerHTML = "Cl<sup>-</sup> ion";
   document.getElementById("modelArea").style.display = "none";
   document.getElementById("controls").style.display = "none";
   document.getElementById("graphArea").style.display = "none";
@@ -818,6 +856,8 @@ function resetSynapticTerminalQuiz() {
   document.getElementById("synapticTerminalQuiz").style.display = "none";
   document.getElementById("neuronEffectQuiz").style.display = "none";
   document.getElementById("negativeIonQuiz").style.display = "none";
+  document.getElementById("neuronEffectQuizExplanation").style.display = "none";
+  document.getElementById("negativeIonQuizExplanation").style.display = "none";
   document.getElementById("synapticTerminalQuizNextButton").style.display = "none";
   document.getElementById("neuronEffectQuizNextButton").style.display = "none";
   document.getElementById("negativeIonQuizNextButton").style.display = "none";
@@ -900,6 +940,7 @@ function answerNeuronEffectQuiz() {
   likelyMarker.className = "quiz-marker correct";
   largerMarker.className = "quiz-marker incorrect";
   lessMarker.className = "quiz-marker incorrect";
+  document.getElementById("neuronEffectQuizExplanation").style.display = "block";
   document.getElementById("neuronEffectQuizNextButton").style.display = "inline-block";
 }
 
@@ -920,6 +961,7 @@ function answerNegativeIonQuiz() {
   thresholdMarker.className = "quiz-marker incorrect";
   negativeMarker.className = "quiz-marker correct";
   cannotMarker.className = "quiz-marker incorrect";
+  document.getElementById("negativeIonQuizExplanation").style.display = "block";
   document.getElementById("negativeIonQuizNextButton").style.display = "inline-block";
 }
 
@@ -1278,7 +1320,7 @@ function resetSynapse() {
   if (synapseMode === "inhibitory") {
     document.querySelector("h2").textContent = "Inhibitory Postsynaptic Potential";
     document.getElementById("synapsePage").className = "inhibitory";
-    document.getElementById("synapseIonLegendLabel").textContent = "Cl ion";
+    document.getElementById("synapseIonLegendLabel").innerHTML = "Cl<sup>-</sup> ion";
     resetSynapticTerminalQuiz();
     document.getElementById("synapseGraphArea").style.display = "block";
     showOnlySynapseButtons(freeExploreMode
@@ -1532,10 +1574,15 @@ function restoreActionState(snapshot) {
 function resetPumpQuiz() {
   document.getElementById("pumpQuiz").style.display = "none";
   document.getElementById("chargeQuiz").style.display = "none";
+  document.getElementById("chargeQuizExplanation").style.display = "none";
   document.getElementById("sodiumQuiz").style.display = "none";
   document.getElementById("depolarizationQuiz").style.display = "none";
   document.getElementById("potassiumQuiz").style.display = "none";
   document.getElementById("repolarizationQuiz").style.display = "none";
+  document.getElementById("hyperpolarizationQuiz").style.display = "none";
+  document.getElementById("depolarizationQuizExplanation").style.display = "none";
+  document.getElementById("repolarizationQuizExplanation").style.display = "none";
+  document.getElementById("hyperpolarizationQuizExplanation").style.display = "none";
   document.getElementById("pumpQuizNextButton").style.display = "none";
   document.getElementById("chargeQuizNextButton").style.display = "none";
   document.getElementById("sodiumQuizNextButton").style.display = "none";
@@ -1622,6 +1669,7 @@ function answerChargeQuiz() {
   noEffectMarker.className = "quiz-marker incorrect";
   positiveInsideMarker.className = "quiz-marker incorrect";
   negativeInsideMarker.className = "quiz-marker correct";
+  document.getElementById("chargeQuizExplanation").style.display = "block";
   document.getElementById("chargeQuizNextButton").style.display = "inline-block";
 }
 
@@ -1661,6 +1709,7 @@ function answerDepolarizationQuiz() {
   noChangeMarker.className = "quiz-marker incorrect";
   positiveMarker.className = "quiz-marker correct";
   negativeMarker.className = "quiz-marker incorrect";
+  document.getElementById("depolarizationQuizExplanation").style.display = "block";
   document.getElementById("depolarizationQuizNextButton").style.display = "inline-block";
 }
 
@@ -1700,6 +1749,7 @@ function answerRepolarizationQuiz() {
   positiveMarker.className = "quiz-marker incorrect";
   negativeMarker.className = "quiz-marker correct";
   sameMarker.className = "quiz-marker incorrect";
+  document.getElementById("repolarizationQuizExplanation").style.display = "block";
   document.getElementById("repolarizationQuizNextButton").style.display = "inline-block";
 }
 
@@ -1718,6 +1768,7 @@ function answerHyperpolarizationQuiz() {
   kMarker.textContent = "✓";
   naMarker.className = "quiz-marker incorrect";
   kMarker.className = "quiz-marker correct";
+  document.getElementById("hyperpolarizationQuizExplanation").style.display = "block";
   document.getElementById("hyperpolarizationQuizNextButton").style.display = "inline-block";
 }
 
